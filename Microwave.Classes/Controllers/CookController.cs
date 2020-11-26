@@ -3,6 +3,7 @@ using Microwave.Classes.Interfaces;
 
 namespace Microwave.Classes.Controllers
 {
+    
     public class CookController : ICookController
     {
         // Since there is a 2-way association, this cannot be set until the UI object has been created
