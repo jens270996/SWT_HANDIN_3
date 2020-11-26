@@ -35,7 +35,7 @@ namespace Microwave.Test.Integration
         }
 
         [Test]
-        public void LightOff_LoggedLightOff()
+        public void LightOnOff_LoggedLightOff()
         {
             light.TurnOn();
             light.TurnOff();
