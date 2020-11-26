@@ -7,7 +7,8 @@ using NUnit.Framework;
 
 namespace Microwave.Test.Integration
 {
-    class PowerTube_Output
+    [TestFixture]
+    public class PowerTube_Output
     {
    
         private IOutput output;
@@ -27,12 +28,40 @@ namespace Microwave.Test.Integration
         [TestCase(1)]
         [TestCase(37)]
         [TestCase(100)]
-        public void StartCooking_TurnOnCalled(int value)
+        public void StartCooking_TurnOnCalledWithCorrectValues_OutputWithCorrectValues(int value)
         {
             str = new StringWriter();
             Console.SetOut(str);
             cookControllerDriver.StartCooking(value);
             StringAssert.Contains( $"PowerTube works with {value}", str.ToString());
+        }
+
+        [TestCase(0)]
+        [TestCase(200)]
+        [TestCase(-5)]
+        public void StartCooking_TurnOnCalledWithWrongValues_ExceptionThrown(int value)
+        {
+            ArgumentOutOfRangeException ex = Assert.Throws<ArgumentOutOfRangeException>(() =>
+                cookControllerDriver.StartCooking(value));
+        }
+
+        [Test]
+        public void StartCookingAlreadyOn_TurnOnCalled_ExceptionThrown()
+        {
+            cookControllerDriver.StartCooking(50);
+            ApplicationException ex = Assert.Throws<ApplicationException>(() =>
+                cookControllerDriver.StartCooking(50));
+            Assert.That(ex.Message, Is.EqualTo("PowerTube.TurnOn: is already on"));
+        }
+
+        [Test]
+        public void StopCalled()
+        {
+            str = new StringWriter();
+            Console.SetOut(str);
+            cookControllerDriver.StartCooking(50);
+            cookControllerDriver.Stop();
+            StringAssert.Contains($"PowerTube turned off", str.ToString());
         }
     }
 }
