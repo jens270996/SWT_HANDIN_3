@@ -38,10 +38,10 @@ namespace Microwave.Test.Integration
             tB = new Button();
             scB = new Button();
 
-            var cooker = new CookController(timer, display, powerTube);
+            cookController = new CookController(timer, display, powerTube);
             userInterface = new UserInterface(pB, tB, scB, door, display, light, cookController);
-            cooker.UI = userInterface;
-            cookController = cooker;
+            cookController.UI = userInterface;
+            
         }
 
         [Test]
@@ -116,7 +116,7 @@ namespace Microwave.Test.Integration
             //str.Received().WriteLine($"Display cleared")
             
             while (watch.IsRunning) {
-                if (watch.ElapsedMilliseconds > 60000) break;
+                
             }
             Assert.AreEqual(value * 60 * 1000, watch.ElapsedMilliseconds, 1000);
         }

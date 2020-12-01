@@ -25,19 +25,19 @@ namespace Microwave.Test.Integration
             cookControllerDriver = new CookControllerDriver(powerTube);
         }
 
-        [TestCase(1)]
-        [TestCase(37)]
+        [TestCase(50)]
+        [TestCase(150)]
         [TestCase(100)]
         public void StartCooking_TurnOnCalledWithCorrectValues_OutputWithCorrectValues(int value)
         {
             str = new StringWriter();
             Console.SetOut(str);
             cookControllerDriver.StartCooking(value);
-            StringAssert.Contains( $"PowerTube works with {value}", str.ToString());
+            StringAssert.Contains( $"PowerTube works with {value/7}", str.ToString());
         }
 
         [TestCase(0)]
-        [TestCase(200)]
+        [TestCase(800)]
         [TestCase(-5)]
         public void StartCooking_TurnOnCalledWithWrongValues_ExceptionThrown(int value)
         {
