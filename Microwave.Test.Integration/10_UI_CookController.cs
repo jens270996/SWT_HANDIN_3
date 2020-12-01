@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using Microwave.Classes.Boundary;
 using Microwave.Classes.Controllers;
@@ -12,11 +13,11 @@ namespace Microwave.Test.Integration
     public class _10_UI_CookController
     {
         private ITimer timer;
-        private ICookController cookController;
+        private CookController cookController;
         private IPowerTube powerTube;
         private IOutput output;
         private IDisplay display;
-        private IUserInterface userInterface;
+        private UserInterface userInterface;
         private IButton pB;
         private IButton tB;
         private IButton scB;
@@ -25,7 +26,7 @@ namespace Microwave.Test.Integration
         private StringWriter str;
 
         [SetUp]
-        public void Śetup()
+        public void Setup()
         {
             output = new Output();
             display = new Display(output);
@@ -36,8 +37,11 @@ namespace Microwave.Test.Integration
             pB = new Button();
             tB = new Button();
             scB = new Button();
+
+            var cooker = new CookController(timer, display, powerTube);
             userInterface = new UserInterface(pB, tB, scB, door, display, light, cookController);
-            cookController = new CookController(timer, display, powerTube, userInterface);
+            cooker.UI = userInterface;
+            cookController = cooker;
         }
 
         [Test]
@@ -68,26 +72,53 @@ namespace Microwave.Test.Integration
             StringAssert.Contains($"Display shows: {value} W", str.ToString());
         }
 
-        //[TestCase(1)]
-        [TestCase(2)]
+        
         [TestCase(3)]
         [TestCase(4)]
         [TestCase(5)]
-        public void OnStartPressed_PressedSeveral_CorrectOutput(int value)
+        public void OnPowerPressedSeveral_StartPressed_StartsCooking(int value)
         {
             str = new StringWriter();
             Console.SetOut(str);
-            pB.Press();
+            
+            
+            for (int i = 0; i < value; ++i)
+            {
+                pB.Press();
+            }
+            tB.Press();
+            scB.Press();
+            StringAssert.Contains($"PowerTube works with {value*50/7}", str.ToString());
+        }
+        [TestCase(3)]
+        [TestCase(4)]
+        [TestCase(5)]
+        public void OnTimerPressedSeveral_StartPressed_CorrectTime(int value)
+        {
+            str = new StringWriter();
+            Console.SetOut(str);
+
+
+                pB.Press();
+
             for (int i = 0; i < value; ++i)
             {
                 tB.Press();
             }
-            --value;
-            StringAssert.Contains($"Display shows: {value}:", str.ToString());
+
+            var watch = new Stopwatch();
+            timer.Expired += (object o, EventArgs e) => watch.Stop();
+            watch.Start();
+            scB.Press();
+            
+            
+
+            //str.Received().WriteLine($"Display cleared")
+            
+            while (watch.IsRunning) {
+                if (watch.ElapsedMilliseconds > 60000) break;
+            }
+            Assert.AreEqual(value * 60 * 1000, watch.ElapsedMilliseconds, 1000);
         }
-
-
-
-
     }
 }

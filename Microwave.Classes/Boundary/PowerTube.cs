@@ -16,6 +16,8 @@ namespace Microwave.Classes.Boundary
 
         public void TurnOn(int power)
         {
+            //power percent relative to watt input.
+            power /= 7;
             if (power < 1 || 100 < power)
             {
                 throw new ArgumentOutOfRangeException("power", power, "Must be between 1 and 100 (incl.)");
