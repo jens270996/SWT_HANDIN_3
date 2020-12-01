@@ -77,8 +77,7 @@ namespace Microwave.Test.Integration
             timer.Expired += Raise.EventWith(this, EventArgs.Empty);
 
             ui.Received(1).CookingIsDone();
-            //StringAssert.Contains($"Display shows: {0}:{59}", str.ToString());
-            //StringAssert.Contains($"Display shows: {0}:{59}", str.ToString());
+            
         }
 
         [Test]

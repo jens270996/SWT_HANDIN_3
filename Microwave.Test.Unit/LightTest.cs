@@ -6,6 +6,7 @@ using NUnit.Framework;
 namespace Microwave.Test.Unit
 {
     [TestFixture]
+
     public class LightTest
     {
         private Light uut;

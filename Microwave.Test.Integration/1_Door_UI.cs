@@ -4,22 +4,36 @@ using Microwave.Classes.Controllers;
 using Microwave.Classes.Interfaces;
 using NSubstitute;
 using NUnit.Framework;
+using System;
 
 namespace Microwave.Test.Integration
 {
+    public class ButtonDriver : IButton
+    {
+        public event EventHandler Pressed;
+
+        public void Press()
+        {
+            Pressed?.Invoke(this, EventArgs.Empty);
+        }
+    }
     public class Door_UI
     {
         private IDoor door;
         private ILight light;
+        private IButton scB;
+        private IButton pB;
+        private IButton tB;
+        private ICookController cooker;
         [SetUp]
         public void Setup()
         {
             door = new Door();
-            var pB = Substitute.For<IButton>();
-            var tB = Substitute.For<IButton>();
-            var scB = Substitute.For<IButton>();
+            pB = new ButtonDriver();
+            tB = new ButtonDriver();
+            scB = new ButtonDriver();
             var disp = Substitute.For<IDisplay>();
-            var cooker = Substitute.For<ICookController>();
+            cooker = Substitute.For<ICookController>();
             light = Substitute.For<ILight>();
 
 
@@ -48,5 +62,17 @@ namespace Microwave.Test.Integration
             door.Close();
             light.Received(0).TurnOff();
         }
+
+        [Test]
+        public void Power_Timer_StartButtonPressedDoorOpened_CookerStopped()
+        {
+            pB.Press();
+            tB.Press();
+            scB.Press();
+            door.Open();
+            cooker.Received(1).Stop();
+            
+        }
+        
     }
 }
