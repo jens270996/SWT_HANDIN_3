@@ -26,13 +26,13 @@ namespace Microwave.Test.Unit
         public void TurnOn_WasOffCorrectPower_CorrectOutput(int power)
         {
             uut.TurnOn(power);
-            output.Received().OutputLine(Arg.Is<string>(str => str.Contains($"{Math.Ceiling((decimal)power/7)}")));
+            output.Received().OutputLine(Arg.Is<string>(str => str.Contains($"{power/7}")));
         }
 
         [TestCase(-5)]
         [TestCase(-1)]
         [TestCase(0)]
-        [TestCase(701)]
+        [TestCase(710)]
         [TestCase(750)]
         public void TurnOn_WasOffOutOfRangePower_ThrowsException(int power)
         {
