@@ -88,7 +88,7 @@ namespace Microwave.Test.Integration
             }
             tB.Press();
             scB.Press();
-            StringAssert.Contains($"PowerTube works with {value*50/7}", str.ToString());
+            StringAssert.Contains($"PowerTube works with {value*Math.Ceiling((decimal)50/7)}", str.ToString());
         }
         [TestCase(3)]
         [TestCase(4)]

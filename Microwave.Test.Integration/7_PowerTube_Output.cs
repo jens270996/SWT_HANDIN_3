@@ -33,7 +33,7 @@ namespace Microwave.Test.Integration
             str = new StringWriter();
             Console.SetOut(str);
             cookControllerDriver.StartCooking(value);
-            StringAssert.Contains( $"PowerTube works with {value/7}", str.ToString());
+            StringAssert.Contains( $"PowerTube works with {Math.Ceiling((decimal)value/7)}", str.ToString());
         }
 
         [TestCase(0)]
