@@ -90,9 +90,9 @@ namespace Microwave.Test.Integration
             scB.Press();
             StringAssert.Contains($"PowerTube works with {value*Math.Ceiling((decimal)50/7)}", str.ToString());
         }
-        [TestCase(3)]
-        [TestCase(4)]
-        [TestCase(5)]
+        [TestCase(1)]
+        [TestCase(2)]
+        
         public void OnTimerPressedSeveral_StartPressed_CorrectTime(int value)
         {
             str = new StringWriter();

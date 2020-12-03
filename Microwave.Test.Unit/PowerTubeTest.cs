@@ -3,6 +3,7 @@ using Microwave.Classes.Interfaces;
 using NSubstitute;
 using NSubstitute.Core.Arguments;
 using NUnit.Framework;
+using System;
 
 namespace Microwave.Test.Unit
 {
@@ -25,7 +26,7 @@ namespace Microwave.Test.Unit
         public void TurnOn_WasOffCorrectPower_CorrectOutput(int power)
         {
             uut.TurnOn(power);
-            output.Received().OutputLine(Arg.Is<string>(str => str.Contains($"{power/7}")));
+            output.Received().OutputLine(Arg.Is<string>(str => str.Contains($"{Math.Ceiling((decimal)power/7)}")));
         }
 
         [TestCase(-5)]
