@@ -113,7 +113,7 @@ namespace Microwave.Test.Integration
             
             
 
-            //str.Received().WriteLine($"Display cleared")
+            
             
             while (watch.IsRunning) {
                 
